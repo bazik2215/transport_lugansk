@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Транспортная энциклопедия Луганска</title>
+    <style>
+        /* === МАКСИМАЛЬНО СТРОГИЙ СТИЛЬ === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Linux Libertine', serif;
+            background: #f5f5f0;
+            padding: 0;
+            color: #111;
+        }
+        
+        /* === ШАПКА (строгая, без градиента) === */
+        .ency-header {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 32px 20px 28px 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+        .ency-header h1 {
+            font-size: 32px;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .ency-header p {
+            font-size: 14px;
+            color: #aaa;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: #2a2a2a;
+            padding: 5px 16px;
+            font-size: 12px;
+            color: #ccc;
+            letter-spacing: 0.3px;
+        }
+        
+        /* === ОСНОВНАЯ СЕТКА === */
+        .main-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* === БЛОКИ (строгие, без теней и скруглений) === */
+        .section-card {
+            background: white;
+            margin-bottom: 28px;
+            border: 1px solid #ccc;
+        }
+        .section-title {
+            background: #f0f0ea;
+            padding: 10px 18px;
+            border-bottom: 1px solid #ccc;
+        }
+        .section-title h2 {
+            font-size: 18px;
+            font-weight: normal;
+            color: #111;
+            margin: 0;
+            border-left: 3px solid #888;
+            padding-left: 10px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        .section-title .count {
+            background: #ddd;
+            padding: 2px 8px;
+            font-size: 11px;
+            margin-left: 10px;
+            color: #222;
+        }
+        .section-content {
+            padding: 18px;
+        }
+        
+        /* === СЕТКА МАРШРУТОВ === */
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 12px;
+        }
+        .route-card {
+            background: #fefefe;
+            border: 1px solid #ddd;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .route-card:hover {
+            background: #f5f5f0;
+            border-color: #aaa;
+        }
+        .route-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111;
+            font-family: 'Courier New', monospace;
+        }
+        .route-name {
+            font-size: 12px;
+            color: #333;
+            margin-top: 6px;
+        }
+        .route-badge {
+            display: inline-block;
+            background: #e8e8e8;
+            padding: 1px 8px;
+            font-size: 10px;
+            margin-top: 8px;
+            margin-right: 6px;
+            color: #222;
+        }
+        
+        /* === ЗАГЛУШКА === */
+        .coming-soon {
+            text-align: center;
+            padding: 24px;
+            background: #fafaf7;
+            border: 1px solid #e0e0d8;
+        }
+        .coming-soon p {
+            color: #555;
+            font-size: 12px;
+        }
+        
+        /* === ТАБЛИЦА СТАТИСТИКИ === */
+        .stat-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .stat-table td {
+            padding: 7px 6px;
+            border-bottom: 1px solid #e0e0d8;
+        }
+        .stat-table td:first-child {
+            font-weight: normal;
+            width: 160px;
+            color: #333;
+        }
+        
+        /* === ПРЕДУПРЕЖДЕНИЕ === */
+        .hatnote {
+            background: #fafaf7;
+            border-left: 3px solid #888;
+            padding: 8px 14px;
+            margin: 0 0 24px 0;
+            font-size: 12px;
+            color: #333;
+            border-top: 1px solid #e0e0d8;
+            border-right: 1px solid #e0e0d8;
+            border-bottom: 1px solid #e0e0d8;
+        }
+        
+        /* === ПОДВАЛ === */
+        .ency-footer {
+            background: #1a1a1a;
+            color: #888;
+            padding: 20px 20px;
+            text-align: center;
+            font-size: 11px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+        }
+        .ency-footer a {
+            color: #aaa;
+            text-decoration: none;
+        }
+        .ency-footer a:hover {
+            color: #fff;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 700px) {
+            .ency-header h1 { font-size: 24px; }
+            .routes-grid { grid-template-columns: 1fr; }
+            .stats-bar { gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ШАПКА (строгая, чёрная) -->
+<div class="ency-header">
+    <h1>Транспортная энциклопедия Луганска</h1>
+    <p>Справочник городского транспорта: маршруты, остановки, подвижной состав</p>
+    <div class="stats-bar">
+        <div class="stat-item">маршрутов: 1</div>
+        <div class="stat-item">актуальные данные</div>
+        <div class="stat-item">апрель 2026</div>
+    </div>
+</div>
+
+<!-- ОСНОВНОЙ КОНТЕНТ -->
+<div class="main-container">
+    
+    <div class="hatnote">
+        Энциклопедия находится в стадии наполнения. Добавлены первые маршруты.
+    </div>
+    
+    <!-- БЛОК: МАРШРУТЫ -->
+    <div class="section-card">
+        <div class="section-title">
+            <h2>Автобусные маршруты</h2>
+            <span class="count">2 маршрута</span>
+        </div>
+        <div class="section-content">
+            <div class="routes-grid">
+                <a href="route_118.html" class="route-card">
+                    <div class="route-number">№118</div>
+                    <div class="route-name">Квартал Мирный — Квартал Дзержинского</div>
+                    <span class="route-badge">действующий</span>
+                    <span class="route-badge">36,7 км</span>
+                </a>
+                <div class="route-card" style="opacity:0.5; cursor:default;">
+                    <div class="route-number">—</div>
+                    <div class="route-name">Следующий маршрут</div>
+                    <span class="route-badge">в планах</span>
+                </div>
+                <div class="route-card" style="opacity:0.5; cursor:default;">
+                    <div class="route-number">—</div>
+                    <div class="route-name">Следующий маршрут</div>
+                    <span class="route-badge">в планах</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- БЛОК: ОСТАНОВКИ -->
+    <div class="section-card">
+        <div class="section-title">
+            <h2>Остановочные пункты</h2>
+            <span class="count">в разработке</span>
+        </div>
+        <div class="section-content">
+            <div class="coming-soon">
+                <p>Раздел наполняется. Скоро — справочник остановок с привязкой к маршрутам.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- БЛОК: СТАТИСТИКА -->
+    <div class="section-card">
+        <div class="section-title">
+            <h2>Статистика</h2>
+        </div>
+        <div class="section-content">
+            <table class="stat-table">
+                <tr><td>Маршрутов в базе</td><td>1</td></tr>
+                <tr><td>Остановок</td><td>в процессе сбора</td></tr>
+                <tr><td>Период данных</td><td>с 1996 года</td></tr>
+                <tr><td>Перевозчики</td><td> ООО «АНЕТТА», ООО «ЛАП»</td></tr>
+                <tr><td>Типы ПС в каталоге</td><td>БАЗ-2215, БАЗ-22154, Рута 20 ПЕ</td></tr>
+            </table>
+        </div>
+    </div>
+    
+    <!-- БЛОК: ИСТОРИЯ (в планах) -->
+    <div class="section-card">
+        <div class="section-title">
+            <h2>История транспорта Луганска</h2>
+            <span class="count">в планах</span>
+        </div>
+        <div class="section-content">
+            <div class="coming-soon">
+                <p>Хронология развития транспорта: открытие маршрутов, смена ПС, реформы.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ПОДВАЛ -->
+<div class="ency-footer">
+    <p>Транспортная энциклопедия Луганска — неофициальный справочный проект</p>
+    <p style="margin-top:8px;"><a href="#">О проекте</a> | <a href="#">Сообщить об ошибке</a></p>
+</div>
+
+</body>
+</html>

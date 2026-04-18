@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Маршрут №118 — Информация</title>
+    <style>
+        /* === ВИКИ-СТИЛЬ (без служебных кнопок) === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Linux Libertine', 'Georgia', 'Times New Roman', 'Segoe UI', serif;
+            background: #ffffff;  /* ← БЕЛЫЙ фон для страницы маршрута */
+            padding: 0;
+        }
+        /* Простая шапка без кнопок */
+        .wiki-header {
+            background: #f6f6f6;
+            border-bottom: 1px solid #a7d7f9;
+            padding: 12px 24px;
+            font-size: 13px;
+            font-family: sans-serif;
+            color: #54595d;
+        }
+        /* Контейнер */
+        .wiki-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 30px;
+        }
+        /* Содержание TOC */
+        .toc-sidebar {
+            width: 260px;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            padding: 12px 0 12px 12px;
+            font-size: 13px;
+            font-family: sans-serif;
+            align-self: start;
+            position: sticky;
+            top: 20px;
+        }
+        .toc-sidebar h3 {
+            font-size: 16px;
+            font-weight: normal;
+            margin: 0 0 8px 0;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 4px;
+        }
+        .toc-sidebar ul { list-style: none; padding-left: 0; margin: 0; }
+        .toc-sidebar li { margin: 6px 0; }
+        .toc-sidebar a { color: #0645ad; text-decoration: none; }
+        .toc-sidebar a:hover { text-decoration: underline; }
+        .toc-level-2 { padding-left: 20px; }
+        /* Основной контент */
+        .wiki-content {
+            flex: 1;
+            background: white;
+            padding: 20px 30px 40px 30px;
+            border: 1px solid #e0e0e0;
+        }
+        h1 {
+            font-family: 'Linux Libertine', 'Georgia', serif;
+            font-weight: normal;
+            font-size: 32px;
+            border-bottom: 1px solid #a2a9b1;
+            margin: 0 0 12px 0;
+            padding-bottom: 6px;
+        }
+        h2 {
+            font-family: 'Linux Libertine', 'Georgia', serif;
+            font-weight: normal;
+            font-size: 24px;
+            border-bottom: 1px solid #a2a9b1;
+            margin: 32px 0 16px 0;
+            padding-bottom: 4px;
+        }
+        h3 {
+            font-family: 'Linux Libertine', 'Georgia', serif;
+            font-weight: normal;
+            font-size: 18px;
+            margin: 20px 0 12px 0;
+        }
+        /* Инфобокс */
+        .infobox {
+            float: right;
+            clear: right;
+            width: 290px;
+            background: #f9f9f9;
+            border: 1px solid #a2a9b1;
+            margin: 0 0 16px 20px;
+            padding: 10px;
+            font-size: 13px;
+        }
+        .infobox caption {
+            font-size: 16px;
+            font-weight: bold;
+            background: #eaf3ff;
+            padding: 8px;
+            margin: -10px -10px 10px -10px;
+        }
+        .infobox th, .infobox td { padding: 6px 4px; vertical-align: top; }
+        .infobox th { text-align: right; font-weight: bold; width: 95px; }
+        /* ТАБЛИЦА ГРАФИКА (как в транспортных предприятиях) */
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 12px;
+            background: white;
+            font-family: 'Courier New', monospace;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #a2a9b1;
+            padding: 6px 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .schedule-table th {
+            background: #eaf3ff;
+            font-weight: bold;
+            font-family: sans-serif;
+        }
+        .route-end {
+            font-weight: bold;
+            background: #f5f5f5;
+            text-align: left;
+            padding-left: 8px;
+        }
+        .car-header {
+            background: #eaf3ff;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        /* Переключатель остановок */
+        .stops-switch {
+            margin: 15px 0;
+        }
+        .switch-btn {
+            background: #eaf3ff;
+            border: 1px solid #a2a9b1;
+            padding: 8px 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .switch-btn.active {
+            background: #0645ad;
+            color: white;
+            border-color: #0645ad;
+        }
+        .stop-list {
+            background: #fcfcfc;
+            padding: 15px 20px;
+            border: 1px solid #e0e0e0;
+            margin: 10px 0;
+        }
+        .stop-list p {
+            margin: 6px 0;
+            font-size: 14px;
+        }
+        .hidden {
+            display: none;
+        }
+        /* Списки машин */
+        .carlist {
+            background: #f9f9f9;
+            padding: 10px 16px;
+            border-left: 3px solid #36c;
+            margin: 10px 0;
+        }
+        /* История лента */
+        .history-line {
+            border-left: 2px solid #c0c0c0;
+            margin: 15px 0 15px 12px;
+            padding-left: 22px;
+        }
+        .history-item { margin-bottom: 18px; }
+        .history-date {
+            font-weight: bold;
+            color: #0645ad;
+            display: inline-block;
+            width: 85px;
+        }
+        /* История графиков */
+        .history-schedule-block {
+            margin: 30px 0;
+            padding: 10px;
+            background: #fafafa;
+            border-left: 3px solid #a2a9b1;
+            overflow-x: auto;
+        }
+        .history-schedule-block h4 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            color: #0645ad;
+        }
+        /* Фотогалерея */
+        .gallery-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            width: 180px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: #eef;
+        }
+        .gallery-item p {
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        /* Категории */
+        .catlinks {
+            background: #f9f9f9;
+            border: 1px solid #a2a9b1;
+            padding: 8px 12px;
+            margin-top: 30px;
+            font-size: 12px;
+        }
+        .schedule-table tbody tr:nth-child(even) {
+            background-color: #f5f7fa;
+        }
+        .schedule-table tbody tr:hover {
+            background-color: #eef2f5;
+        }
+        .wiki-footer {
+            clear: both;
+            background: #f6f6f6;
+            border-top: 1px solid #a7d7f9;
+            padding: 16px 24px;
+            font-size: 12px;
+            color: #54595d;
+        }
+        .route-scheme-img {
+            max-width: 100%;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        @media (max-width: 900px) {
+            .wiki-wrapper { flex-direction: column; }
+            .toc-sidebar { position: static; width: auto; }
+            .infobox { float: none; margin: 16px 0; width: auto; }
+            .schedule-table { font-size: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wiki-header">
+    Справочная информация • Маршрут №118
+</div>
+
+<div class="wiki-wrapper">
+    <div class="toc-sidebar">
+        <h3>Содержание</h3>
+        <ul>
+            <li><a href="#top">Маршрут №118</a></li>
+            <li><a href="#current">1. Текущая информация</a>
+                <ul class="toc-level-2"><li><a href="#scheme">1.1 Схема</a></li><li><a href="#schedule">1.2 График движения</a></li><li><a href="#stops">1.3 Остановки</a></li></ul>
+            </li>
+            <li><a href="#cars">2. Подвижной состав</a></li>
+            <li><a href="#history">3. Хронология</a></li>
+            <li><a href="#timeline_history">4. История графиков</a></li>
+            <li><a href="#gallery">5. Фотогалерея</a></li>
+        </ul>
+    </div>
+
+    <div class="wiki-content">
+        <h1 id="top">Маршрут №118 <span style="font-size:16px;">(Квартал Мирный — Квартал Дзержинского)</span></h1>
+
+        <table class="infobox">
+            <caption>Автобусный маршрут №118</caption>
+            <tr><th>Тип</th><td>автобус (кольцевой)</th></tr>
+			<tr><th>Состояние</th><td>Действующий</th></tr>
+			<tr><th>Периодичность</th><td>По будням</th></tr>
+            <tr><th>Протяжённость</th><td>36,7 км</th></tr>
+            <tr><th>Время в пути</th><td>104 мин</th></tr>
+			<tr><th>Количество машин</th><td>3</th></tr>
+            <tr><th>Перевозчик</th><td>ООО «АНЕТТА», ООО «ЛАП»</th></tr>
+            <tr><th>Открыт</th><td>не позднее 1996 года</th></tr>
+            <tr><th>Стоимость</th><td>40 ₽</th></tr>
+        </table>
+
+        <p><b>Маршрут №118</b> — автобусный маршрут, связывающий "Мирные кварталы" с кварталом Дзержинского через железнодорожный вокзал, старый центр города и посёлок Малая Вергунка. На маршруте работают автобусы моделей БАЗ-2215, БАЗ-22154, Рута 20 ПЕ.</p>
+		<p>Ранее эксплуатировались Рута СПВ-17, Рута СПВ А048.0, Рута 18, Рута 20, Рута СПВ А048.2, Богдан А201</p>
+
+        <!-- 1. ТЕКУЩАЯ ИНФОРМАЦИЯ -->
+        <h2 id="current">1. Текущая информация</h2>
+        
+        <h3 id="scheme">1.1 Схема движения маршрута</h3>
+        <img class="route-scheme-img" src="https://via.placeholder.com/800x300?text=СХЕМА+МАРШРУТА+№118" alt="Схема маршрута">
+        <p><em>※ Вставьте сюда скрин схемы движения, заменив src="путь_к_вашему_рисунку.jpg"</em></p>
+		<p><b>Маршрут следования:</b> 2-я Краснознамённая улица – Победоносная улица – Черноморская улица – Улица Нечуя-Левицкого – Павловская улица – Советская улица – Улица Виктора Пятёркина – Улица Сараева – Улица Виктора Пятёркина – Улица Даля – Улица Пушкина – Улица Ленина – Улица Тараса Рыбаса – Улица Тараса Шевченко – Улица Фрунзе – 2-я Беломорская улица – Улица КИМа – Улица Гайдара – Улица Смоленская – Улица Путейская – Улица Монтажная – Улица Гайдара – Улица КИМа – 2-я Беломорская улица – Улица Фрунзе – Улица 21-я Линия – Красноармейская улица – Октябрьская улица – Улица Карла Маркса – Улица Пушкина  – Улица Виктора Пятёркина – Советская улица – Павловская улица – Улица Нечуя-Левицкого – Черноморская улица – Победоносная улица – 2-я Краснознамённая улица</p>
+
+        <h3 id="schedule">1.2 График движения (текущий)</h3>
+        <p><em>График актуален по состоянию на 04.2026.</em></p>
+        
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Конечная</th>
+                    <th class="car-header">1<br>А872АР</th>
+                    <th class="car-header">2<br>А248АС</th>
+                    <th class="car-header">3<br>А614ЕТ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Круг 1 -->
+                <tr><td rowspan="2">1</td><td class="route-end">Квартал Мирный</td><td>04-50</td><td>05-10</td><td>05-30</td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td>05-40</td><td>06-00</td><td>06-20</td></tr>
+                <!-- Круг 2 -->
+                <tr><td rowspan="2">2</td><td class="route-end">Квартал Мирный</td><td>06-30</td><td>06-50</td><td>07-10</td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td>07-24</td><td>07-44</td><td>08-04</td></tr>
+                <!-- Круг 3 -->
+                <tr><td rowspan="2">3</td><td class="route-end">Квартал Мирный</td><td>08-18</td><td>08-42</td><td>08-55</td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td>2-я Беломорская ул. 08-56</td><td>2-я Беломорская ул. 09-20</td><td>09-59</td></tr>
+                <!-- Круг 4 -->
+                <tr><td rowspan="2">4</td><td class="route-end">Квартал Мирный</td><td> — </td><td> — </td><td>13-03</td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td> — </td><td> — </td><td>13-53</td></tr>
+                <!-- Круг 5 -->
+                <tr><td rowspan="2">5</td><td class="route-end">Квартал Мирный</td><td>14-07</td><td>14-45</td><td>15-05</td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td>14-57</td><td>15-35</td><td>15-55</td></tr>
+                <!-- Круг 6 -->
+                <tr><td rowspan="2">6</td><td class="route-end">Квартал Мирный</td><td>16-05</td><td>16-30</td><td> — </td></tr>
+                <tr><td class="route-end">Квартал Дзержинского</td><td>16-55</td><td>17-15</td><td> — </td></tr>
+            </tbody>
+        </table>
+
+        <h3 id="stops">1.3 Остановки</h3>
+        <div class="stops-switch">
+            <button class="switch-btn active" data-direction="forward">🚌 Туда</button>
+            <button class="switch-btn" data-direction="back">🚍 Обратно</button>
+        </div>
+        <div id="forward-stops" class="stop-list">
+            <p><b>Маршрут следования «Квартал Мирный → Квартал Дзержинского»:</b></p>
+            <p>1. Квартал Мирный</p><p>2. Квартал Ольховский</p><p>3. Квартал Заречный</p>
+            <p>4. Посёлок Косиора (Победоносная улица)</p><p>5. Квартал Героев Сталинграда</p><p>6. Квартал Ленинского Комсомола (Райисполком / м-н «Регион»)</p><p>7. Улица Стаханова</p>
+            <p>8. Павловская улица</p><p>9. Квартал Гаевого</p><p>10. Кооперативный техникум (к-тр «Буревестник»)</p><p>11. Улица Чапаева</p><p>12. З-д Пархоменко (рынок Пархоменко)</p>
+            <p>13. Железнодорожный вокзал</p><p>14. Улица Пушкина</p><p>15. Улица 7-я Линия (улица Тараса Рыбаса)</p><p>16. Красная площадь</p><p>17. Краеведческий музей</p>
+            <p>18. ДК Ленина</p><p>19. Кольцо завода ОР (СШ №10)</p><p>20. Горбольница №2</p><p>21. Машколледж (ЛГУ Даля)</p><p>22. Рынок «Старый городок»</p>
+            <p>23. Автосборочный з-д (з-д «Горизонт»)</p><p>24. Трамвайное депо (ТТУ)</p><p>25. Дачи (по требованию)</p><p>26. 2-я Беломорская улица</p><p>27. 1-я Горская улица</p>
+            <p>28. Минская улица</p><p>29. СШ №39</p><p>30. Вишнёвая улица</p><p>31. Смоленская улица</p><p>32. М-н «Наглядные пособия» (по требованию)</p><p>33. Смоленская улица</p>
+            <p><span style="background:#fef3c7; padding:2px 8px; border-radius:12px; font-size:12px;">🕒 только утром</span> 34. По требованию</p>
+            <p><span style="background:#fef3c7; padding:2px 8px; border-radius:12px; font-size:12px;">🕒 только утром</span> 35. Квартал 50-летия Октября</p>
+            <p><span style="background:#fef3c7; padding:2px 8px; border-radius:12px; font-size:12px;">🕒 только утром</span> 36. По требованию</p>
+            <p><span style="background:#fef3c7; padding:2px 8px; border-radius:12px; font-size:12px;">🕒 только утром</span> 37. Смоленская улица</p>
+            <p>38. Квартал Дзержинского</p>
+        </div>
+        <div id="back-stops" class="stop-list hidden">
+            <p><b>Маршрут следования «Квартал Дзержинского → Квартал Мирный»:</b></p>
+            <p>1. Квартал Дзержинского</p><p>2. Квартальный м-н</p><p>3. 2-я Трамвайная улица (по требованию)</p><p>4. Южная улица</p>
+            <p>5. Улица Гайдара (Монтажная улица)</p><p>6. Смоленская улица</p><p>7. Вишнёвая улица</p><p>8. СШ №39</p>
+            <p>9. Минская улица</p><p>10. 1-я Горская улица</p><p>11. 2-я Беломорская улица</p><p>12. Дачи (по требованию)</p><p>13. Трамвайное депо (ТТУ)</p><p>14. Автосборочный з-д (з-д «Горизонт»)</p><p>15. Рынок «Старый городок»</p>
+            <p>16. Машколледж (ЛГУ Даля)</p><p>17. Горбольница №2</p><p>18. 1-я Проходная завода ОР (Кольцо завода ОР / СШ №10)</p><p>19. Луганский переулок (по требованию)</p><p>20. ДК Ленина</p><p>21. Памятник Борцам Революции (м-н «Птица» / Площадь Борцов Революции)</p>
+            <p>22. «Дом с колоннами» (Улица Демёхина)</p><p>23. М-н «Имидж»</p><p>24. Улица Пушкина</p><p>25. Железнодорожный вокзал</p><p>26. З-д Пархоменко (рынок Пархоменко)</p><p>27. Улица Чапаева</p>
+            <p>28. Кооперативный техникум (к-тр «Буревестник»)</p><p>29. Квартал Гаевого</p><p>30. Павловская улица</p><p>31. Улица Стаханова (м-н «Радуга»)</p><p>32. Квартал Ленинского Комсомола (Райисполком / м-н «Регион»)</p><p>33. Квартал Героев Сталинграда</p>
+            <p>34. Посёлок Косиора (Победоносная улица)</p><p>35. Квартал Заречный</p><p>36. Квартал Ольховский</p><p>37. Квартал Мирный</p>
+        </div>
+
+        <!-- 2. ПОДВИЖНОЙ СОСТАВ -->
+        <h2 id="cars">2. Подвижной состав (последовательность машин)</h2>
+        <div class="carlist"><b>Лето 2016:</b> ВВ 0325 АА, 029-52 АО, АН 3250 ВО, ВВ 0582 ВЕ, ВВ 1986 АА, ВВ 5708 СЕ, 028-86 АО, ВВ 5543 СЕ, ВВ 0324 АА, ВВ 8629 ВЕ, ВВ 0120 АА</div>
+        <div class="carlist"><b>Лето 2018:</b> ВВ 0120 АА, ВВ 0324 АА, ВВ 5331 ВХ, ВВ 1986 АА, А 248 АС, ВВ 3727 АА, ВВ 5708 СЕ</div>
+        <div class="carlist"><b>Лето 2019:</b> ВВ 0120 АА, ВВ 0324 АА, ВВ 1986 АА, А 248 АС LPR, ВВ 2668 АА, ВВ 3727 АА</div>
+        <div class="carlist"><b>Август 2021:</b> А 338 ЕС, А 576 КР, А 872 АР, А 248 АС</div>
+        <div class="carlist"><b>2022:</b> А 338 ЕС, А 576 КР, А 872 АР, А 248 АС, А 614 ЕТ</div>
+        <div class="carlist"><b>Январь 2023:</b> А 338 ЕС, А 872 АР, А 248 АС, А 614 ЕТ</div>
+        <div class="carlist"><b>С июня 2024:</b> А 872 АР, А 248 АС, А 614 ЕТ</div>
+
+        <!-- 3. ИСТОРИЯ МАРШРУТА -->
+        <h2 id="history">3. Хронология</h2>
+        <div class="history-line">
+            <div class="history-item"><span class="history-date">1975 г.</span> Открытие маршрута на ЛиАЗ-677.</div>
+            <div class="history-item"><span class="history-date">1985 г.</span> Продление до ул. Ленина и больницы.</div>
+            <div class="history-item"><span class="history-date">1995 г.</span> Замена на Икарус-260.</div>
+            <div class="history-item"><span class="history-date">2003 г.</span> Продлён до квартала Якира.</div>
+            <div class="history-item"><span class="history-date">2018 г.</span> Низкопольные ПАЗ Vector Next.</div>
+        </div>
+
+        <!-- 4. ИСТОРИЯ ГРАФИКОВ (несколько таблиц) -->
+        <h2 id="timeline_history">4. История графиков движения</h2>
+        
+        <div class="history-schedule-block">
+            <h4>📅 1995–2005 гг. (Икарус-260)</h4>
+            <table class="schedule-table">
+                <thead><tr><th>№</th><th>Конечная</th><th>1<br>А111АА</th><th>2<br>В222ВВ</th><th>3<br>С333СС</th></tr></thead>
+                <tbody>
+                    <tr><td rowspan="2">1</td><td class="route-end">Квартал Дзержинского</td><td>06-00</td><td>06-15</td><td>06-30</td></tr>
+                    <tr><td class="route-end">Квартал Якира</td><td>06-30</td><td>06-45</td><td>07-00</td></tr>
+                    <tr><td rowspan="2">2</td><td class="route-end">Квартал Дзержинского</td><td>07-15</td><td>07-30</td><td>07-45</td></tr>
+                    <tr><td class="route-end">Квартал Якира</td><td>07-45</td><td>08-00</td><td>08-15</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="history-schedule-block">
+            <h4>📅 2010–2015 гг. (ЛиАЗ-5256)</h4>
+            <table class="schedule-table">
+                <thead><tr><th>№</th><th>Конечная</th><th>1<br>О777ОР</th><th>2<br>Р888РР</th></tr></thead>
+                <tbody>
+                    <tr><td rowspan="2">1</td><td class="route-end">Квартал Дзержинского</td><td>06-30</td><td>06-45</td></tr>
+                    <tr><td class="route-end">Квартал Якира</td><td>07-00</td><td>07-15</td></tr>
+                    <tr><td rowspan="2">2</td><td class="route-end">Квартал Дзержинского</td><td>08-00</td><td>08-15</td></tr>
+                    <tr><td class="route-end">Квартал Якира</td><td>08-30</td><td>08-45</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 5. ФОТОГАЛЕРЕЯ -->
+        <h2 id="gallery">5. Фотогалерея</h2>
+        <div class="gallery-grid">
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=ЛиАЗ-677"><p>ЛиАЗ-677, 1980 г.</p></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=Икарус-260"><p>Икарус-260, 1998 г.</p></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=ПАЗ+Vector"><p>ПАЗ Vector Next, 2020 г.</p></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=Салон"><p>Салон ПАЗа</p></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=Остановка"><p>Остановка «Вокзал»</p></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/180x120?text=Маршрут+118"><p>Автобус на линии</p></div>
+        </div>
+        <p style="font-size:12px">※ Замените placeholder-картинки на реальные фото.</p>
+
+        <div class="catlinks">
+            📁 Категории: Автобусные маршруты | Транспорт города Луганска | Маршрут №118
+        </div>
+    </div>
+</div>
+
+<div class="wiki-footer">
+    <span>Актуально на апрель 2026 года</span>
+    <span>Транспортная энциклопедия Луганска — неофициальный справочник</span>
+</div>
+
+<script>
+    // Переключатель остановок
+    const forwardBtn = document.querySelector('[data-direction="forward"]');
+    const backBtn = document.querySelector('[data-direction="back"]');
+    const forwardDiv = document.getElementById('forward-stops');
+    const backDiv = document.getElementById('back-stops');
+
+    function setActiveButton(active) {
+        if (active === 'forward') {
+            forwardBtn.classList.add('active');
+            backBtn.classList.remove('active');
+            forwardDiv.classList.remove('hidden');
+            backDiv.classList.add('hidden');
+        } else {
+            backBtn.classList.add('active');
+            forwardBtn.classList.remove('active');
+            backDiv.classList.remove('hidden');
+            forwardDiv.classList.add('hidden');
+        }
+    }
+
+    forwardBtn.addEventListener('click', () => setActiveButton('forward'));
+    backBtn.addEventListener('click', () => setActiveButton('back'));
+</script>
+
+</body>
+</html>
