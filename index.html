@@ -17,7 +17,7 @@
             color: #111;
         }
         
-        /* === ШАПКА (строгая, без градиента) === */
+        /* === ШАПКА === */
         .ency-header {
             background: #1a1a1a;
             color: #e0e0e0;
@@ -60,7 +60,7 @@
             padding: 30px 20px;
         }
         
-        /* === БЛОКИ (строгие, без теней и скруглений) === */
+        /* === БЛОКИ === */
         .section-card {
             background: white;
             margin-bottom: 28px;
@@ -89,6 +89,32 @@
         }
         .section-content {
             padding: 18px;
+        }
+        
+        /* === КНОПКИ ФИЛЬТРА === */
+        .filter-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background: #e8e8e8;
+            border: 1px solid #ccc;
+            padding: 6px 18px;
+            font-size: 13px;
+            cursor: pointer;
+            font-family: inherit;
+            color: #333;
+            transition: all 0.15s;
+        }
+        .filter-btn:hover {
+            background: #d0d0d0;
+        }
+        .filter-btn.active {
+            background: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
         }
         
         /* === СЕТКА МАРШРУТОВ === */
@@ -127,6 +153,10 @@
             margin-top: 8px;
             margin-right: 6px;
             color: #222;
+        }
+        .route-badge.cancelled {
+            background: #e0c0c0;
+            color: #8b0000;
         }
         
         /* === ЗАГЛУШКА === */
@@ -203,12 +233,12 @@
 </head>
 <body>
 
-<!-- ШАПКА (строгая, чёрная) -->
+<!-- ШАПКА -->
 <div class="ency-header">
     <h1>Транспортная энциклопедия Луганска</h1>
     <p>Справочник городского транспорта: маршруты, остановки, подвижной состав</p>
     <div class="stats-bar">
-        <div class="stat-item">маршрутов: 1</div>
+        <div class="stat-item">маршрутов: 3</div>
         <div class="stat-item">актуальные данные</div>
         <div class="stat-item">апрель 2026</div>
     </div>
@@ -225,25 +255,39 @@
     <div class="section-card">
         <div class="section-title">
             <h2>Автобусные маршруты</h2>
-            <span class="count">2 маршрута</span>
+            <span class="count" id="route-count">2 маршрута</span>
         </div>
         <div class="section-content">
-            <div class="routes-grid">
-                <a href="route_118.html" class="route-card">
+            
+            <!-- КНОПКИ ФИЛЬТРА -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Все</button>
+                <button class="filter-btn" data-filter="active">Действующие</button>
+                <button class="filter-btn" data-filter="cancelled">Отменённые</button>
+            </div>
+            
+            <!-- СЕТКА МАРШРУТОВ -->
+            <div class="routes-grid" id="routes-grid">
+                <!-- Маршрут №118 — действующий -->
+                <a href="route_118.html" class="route-card" data-status="active">
                     <div class="route-number">№118</div>
                     <div class="route-name">Квартал Мирный — Квартал Дзержинского</div>
                     <span class="route-badge">действующий</span>
                     <span class="route-badge">36,7 км</span>
                 </a>
+                
                 <div class="route-card" style="opacity:0.5; cursor:default;">
                     <div class="route-number">—</div>
                     <div class="route-name">Следующий маршрут</div>
                     <span class="route-badge">в планах</span>
                 </div>
-                <div class="route-card" style="opacity:0.5; cursor:default;">
-                    <div class="route-number">—</div>
-                    <div class="route-name">Следующий маршрут</div>
-                    <span class="route-badge">в планах</span>
+                
+                <!-- Маршрут №140 — отменённый  -->
+                <div class="route-card" data-status="cancelled" style="opacity:0.7;">
+                    <div class="route-number">№140</div>
+                    <div class="route-name">Пос. Тепличный — Гост. Колос</div>
+                    <span class="route-badge cancelled">отменён с 2026 г.</span>
+                    <span class="route-badge">34,8 км</span>
                 </div>
             </div>
         </div>
@@ -269,16 +313,16 @@
         </div>
         <div class="section-content">
             <table class="stat-table">
-                <tr><td>Маршрутов в базе</td><td>1</td></tr>
+                <tr><td>Маршрутов в базе</td><td>2 (1 действующий, 1 отменённый)</td></tr>
                 <tr><td>Остановок</td><td>в процессе сбора</td></tr>
                 <tr><td>Период данных</td><td>с 1996 года</td></tr>
-                <tr><td>Перевозчики</td><td> ООО «АНЕТТА», ООО «ЛАП»</td></tr>
+                <tr><td>Перевозчики</td><td>ООО «АНЕТТА», ООО «ЛАП»</td></tr>
                 <tr><td>Типы ПС в каталоге</td><td>БАЗ-2215, БАЗ-22154, Рута 20 ПЕ</td></tr>
             </table>
         </div>
     </div>
     
-    <!-- БЛОК: ИСТОРИЯ (в планах) -->
+    <!-- БЛОК: ИСТОРИЯ -->
     <div class="section-card">
         <div class="section-title">
             <h2>История транспорта Луганска</h2>
@@ -297,6 +341,57 @@
     <p>Транспортная энциклопедия Луганска — неофициальный справочный проект</p>
     <p style="margin-top:8px;"><a href="#">О проекте</a> | <a href="#">Сообщить об ошибке</a></p>
 </div>
+
+<script>
+    // ФИЛЬТР МАРШРУТОВ
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const routeCards = document.querySelectorAll('.route-card');
+    const routeCountSpan = document.getElementById('route-count');
+
+    function updateFilter(filter) {
+        let visibleCount = 0;
+        
+        routeCards.forEach(card => {
+            const status = card.getAttribute('data-status');
+            
+            if (filter === 'all') {
+                card.style.display = 'block';
+                visibleCount++;
+            } else if (filter === 'active' && status === 'active') {
+                card.style.display = 'block';
+                visibleCount++;
+            } else if (filter === 'cancelled' && status === 'cancelled') {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        
+        // Обновляем счётчик
+        let text = '';
+        if (filter === 'all') text = `${visibleCount} маршрутов`;
+        else if (filter === 'active') text = `${visibleCount} действующих`;
+        else if (filter === 'cancelled') text = `${visibleCount} отменённых`;
+        routeCountSpan.textContent = text;
+    }
+    
+    // Обработчики кнопок
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Убираем активный класс у всех кнопок
+            filterButtons.forEach(b => b.classList.remove('active'));
+            // Добавляем активный класс текущей
+            btn.classList.add('active');
+            // Применяем фильтр
+            const filter = btn.getAttribute('data-filter');
+            updateFilter(filter);
+        });
+    });
+    
+    // Инициализация — показываем все маршруты
+    updateFilter('all');
+</script>
 
 </body>
 </html>
